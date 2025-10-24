@@ -34,7 +34,6 @@
           </v-btn>
         </v-form>
 
-        <!-- Separador -->
         <v-divider class="mt-6 mb-2" />
 
         <p class="text-body-2 text-textPrimary">
@@ -67,6 +66,7 @@ const authStore = useAuthStore();
 
 const email = ref("");
 const password = ref("");
+
 const formRef = ref<InstanceType<typeof VForm>>();
 
 const rulesEmail = [

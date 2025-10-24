@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 
 type StoredUser = { email: string; password: string };
 type AuthUser = { email: string } | null;
@@ -8,7 +8,10 @@ export const useAuthStore = defineStore("auth", () => {
   const users = ref<StoredUser[]>([
     { email: "user@test.com", password: "12345678" },
   ]);
-  const user = ref<AuthUser>(null);
+
+  const user = ref<AuthUser>(
+    JSON.parse(localStorage.getItem("auth_user") || "null")
+  );
 
   const isAuthenticated = computed(() => user.value !== null);
 
@@ -44,6 +47,11 @@ export const useAuthStore = defineStore("auth", () => {
   const logout = () => {
     user.value = null;
   };
+
+  // Automatic persistence in localStorage
+  watch(user, (newUser) => {
+    localStorage.setItem("auth_user", JSON.stringify(newUser));
+  });
 
   return {
     user,

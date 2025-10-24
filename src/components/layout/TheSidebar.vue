@@ -10,7 +10,6 @@
     permanent
     @click="rail = false"
   >
-    <!-- Contenedor principal: scrollable si es necesario -->
     <div class="flex-grow-1 d-flex flex-column">
       <!-- Logo + toggle -->
       <div class="d-flex align-center justify-space-between">
@@ -25,7 +24,7 @@
         ></v-btn>
       </div>
 
-      <!-- Menú principal (oculto en rail) -->
+      <!-- Menu  -->
       <v-list
         v-if="!rail"
         nav
@@ -67,7 +66,7 @@
               </v-list-item-title>
             </div>
 
-            <!-- Extra contenido segun item -->
+            <!-- Extra content -->
             <template v-slot:append>
               <div v-if="item.to === '/appointments'" class="position-relative">
                 <v-badge
@@ -120,83 +119,29 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useAuthStore } from "@/stores/auth";
 import { useRouter, useRoute } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
+import { sidebarMenu } from "@/utils/sidebarMenu";
 
-const drawer = ref(true);
-const rail = ref(false);
 const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
 
-const handleLogout = () => {
-  authStore.logout();
-  router.push("/login");
-};
+const drawer = ref(true);
+const rail = ref(false);
 
 const isActive = (path: string) => route.path === path;
 
-// Avatares del chat (pueden ser locales o URLs)
+const menu = sidebarMenu;
 const chatUsers = [
   "/avatars/user1.jpeg",
   "/avatars/user2.jpeg",
   "/avatars/user3.jpeg",
 ];
 
-// Estructura de menú
-const menu = {
-  menu: {
-    title: "Menu",
-    items: [
-      {
-        title: "Dashboard",
-        to: "/dashboard",
-        icon: "mdi-view-dashboard-outline",
-      },
-      {
-        title: "Pet Profile",
-        to: "/pets",
-        icon: "mdi-paw-outline",
-      },
-    ],
-  },
-  analytics: {
-    title: "Analytics",
-    items: [
-      {
-        title: "Health Monitoring",
-        to: "/health",
-        icon: "mdi-heart-box-outline",
-      },
-      {
-        title: "Vaccination Schedule",
-        to: "/vaccines",
-        icon: "mdi-needle",
-      },
-    ],
-  },
-  schedule: {
-    title: "Schedule",
-    items: [
-      { title: "Chat", to: "/chat", icon: "mdi-message-text-outline" },
-      {
-        title: "Appointments",
-        to: "/appointments",
-        icon: "mdi-calendar-month-outline",
-      },
-    ],
-  },
-  help: {
-    title: "Help",
-    items: [
-      { title: "Settings", to: "/settings", icon: "mdi-cog-outline" },
-      {
-        title: "Documentation",
-        to: "/docs",
-        icon: "mdi-file-document-outline",
-      },
-    ],
-  },
+const handleLogout = () => {
+  authStore.logout();
+  router.push("/login");
 };
 </script>
 
@@ -213,7 +158,6 @@ const menu = {
   position: relative;
 }
 
-/* Avatares superpuestos */
 .user-avatars {
   position: relative;
   width: 60px;

@@ -17,7 +17,7 @@
       />
     </div>
 
-    <!-- Métricas -->
+    <!-- Stats -->
     <v-sheet
       color="secondary"
       rounded="lg"
@@ -39,10 +39,9 @@
       </v-btn>
     </v-sheet>
 
-    <!-- Gráfico -->
     <v-sheet color="secondary" class="pa-4 rounded-lg">
       <div class="d-flex">
-        <!-- Eje Y (valores 1 a 10) -->
+        <!-- Y axis -->
         <div class="d-none d-md-flex flex-column justify-space-between mr-2">
           <span
             v-for="(val, index) in exampleValues"
@@ -53,9 +52,7 @@
           </span>
         </div>
 
-        <!-- Sparkline con líneas -->
         <div class="flex-grow-1 position-relative">
-          <!-- Líneas horizontales -->
           <div class="sparkline-grid">
             <div
               v-for="(val, index) in exampleValues"
@@ -65,7 +62,6 @@
             ></div>
           </div>
 
-          <!-- Gráfico -->
           <v-sparkline
             :model-value="values"
             color="primary"
@@ -77,7 +73,7 @@
             :smooth="false"
           />
 
-          <!-- Eje X -->
+          <!-- X axis -->
           <div class="d-flex justify-space-between mt-1 px-1">
             <span
               v-for="(month, index) in months"
@@ -94,32 +90,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import {
+  periods,
+  metrics,
+  metricsValues,
+  periodLabels,
+  exampleValues,
+} from "@/utils/healthMonitoringData";
 
 const period = ref("Weekly");
-const periods = ["Daily", "Weekly", "Monthly"];
-
 const activeMetric = ref("stress");
 
-const metrics = [
-  { key: "stress", label: "Stress level", icon: "mdi-heart-flash" },
-  { key: "pulse", label: "Pulse", icon: "mdi-pulse" },
-  { key: "temperature", label: "Temperature", icon: "mdi-thermometer" },
-  { key: "calories", label: "Calories burned", icon: "mdi-fire" },
-];
+const values = ref<number[]>(
+  metricsValues[activeMetric.value]?.[period.value] || []
+);
+const months = ref(periodLabels[period.value]);
 
-// Datos simulados
-const values = ref([3, 7, 4, 9, 6, 10, 5, 8, 2, 7]);
-const exampleValues = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]; // invertidos para eje Y visual
-const months = ["September", "November", "December", "January"];
+watch([activeMetric, period], () => {
+  values.value = metricsValues[activeMetric.value]?.[period.value] || [];
+  months.value = periodLabels[period.value];
+});
 </script>
 
 <style scoped>
-.v-card {
-  border-radius: 16px;
-  background-color: #f9fbfd;
-}
-
 .position-relative {
   position: relative;
   height: 100%;
@@ -130,7 +124,7 @@ const months = ["September", "November", "December", "January"];
   top: 0;
   left: 0;
   right: 0;
-  height: 100%; /* flexible */
+  height: 100%;
   pointer-events: none;
 }
 
@@ -138,8 +132,6 @@ const months = ["September", "November", "December", "January"];
   position: absolute;
   width: 100%;
   border-top: 1px dashed rgba(0, 0, 0, 0.1);
-  transform: translateY(
-    -50%
-  ); /* para centrar la línea sobre la posición exacta */
+  transform: translateY(-50%);
 }
 </style>

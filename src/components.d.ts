@@ -11,15 +11,15 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    ChatCard: typeof import('./components/ChatCard.vue')['default']
-    HealthMonitoring: typeof import('./components/HealthMonitoring.vue')['default']
+    ChatCard: typeof import('./components/dashboard/ChatCard.vue')['default']
+    HealthMonitoring: typeof import('./components/dashboard/HealthMonitoring.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
-    ProgressCard: typeof import('./components/ProgressCard.vue')['default']
+    ProgressCard: typeof import('./components/dashboard/ProgressCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Sidebar: typeof import('./components/TheSidebar.vue')['default']
-    TheNavbar: typeof import('./components/TheNavbar.vue')['default']
-    TheSidebar: typeof import('./components/TheSidebar.vue')['default']
-    VaccinationSchedule: typeof import('./components/VaccinationSchedule.vue')['default']
+    Sidebar: typeof import('./components/layout/TheSidebar.vue')['default']
+    TheNavbar: typeof import('./components/layout/TheNavbar.vue')['default']
+    TheSidebar: typeof import('./components/layout/TheSidebar.vue')['default']
+    VaccinationSchedule: typeof import('./components/dashboard/VaccinationSchedule.vue')['default']
   }
 }

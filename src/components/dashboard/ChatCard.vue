@@ -9,21 +9,26 @@
       </span>
     </div>
 
-    <!-- Lista de mensajes -->
+    <!-- Chats -->
     <div class="chat-list">
-      <v-row v-for="(chat, index) in chats" :key="index" class="align-center">
-        <!-- Avatar -->
+      <v-row
+        v-for="(chat, index) in chats"
+        :key="index"
+        class="align-center chat-row"
+        style="cursor: pointer"
+        @click="openChatOverlay(chat)"
+      >
         <v-col cols="1">
           <span v-if="chat.status" :class="['status-dot', chat.status]"></span>
           <img :src="chat.avatar" alt="avatar" class="avatar-img" />
         </v-col>
 
-        <!-- Contenido -->
         <v-col cols="10 text-textPrimary">
           <p>{{ chat.name }}</p>
-          <v-card-subtitle class="pa-0 opacity-70">{{
-            chat.message
-          }}</v-card-subtitle>
+          <v-card-subtitle class="pa-0 opacity-70">
+            {{ chat.message.slice(0, 50)
+            }}{{ chat.message.length > 50 ? "..." : "" }}
+          </v-card-subtitle>
         </v-col>
 
         <v-col cols="1" class="pa-0">
@@ -36,47 +41,38 @@
         </v-col>
       </v-row>
     </div>
+
+    <!-- Overlay - Complete message -->
+    <v-dialog v-model="overlay" max-width="400">
+      <v-card>
+        <v-card-title class="d-flex align-center mt-4">
+          <img :src="selectedChat?.avatar" class="avatar-img me-2" />
+          <span>{{ selectedChat?.name }}</span>
+        </v-card-title>
+        <v-card-text>
+          <p>{{ selectedChat?.message }}</p>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn text color="primary" @click="overlay = false">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
 <script setup lang="ts">
-const chats = [
-  {
-    name: "Helen Brooks",
-    avatar: "/avatars/user1.jpeg",
-    status: "online", // online, away, offline
-    message:
-      "Luna has been scratching her ears a lot lately and shaking her head. I checked her ears and they look red and inflamed. She also seems to be in pain when I touch them.",
-    time: "15:56",
-    unread: 0,
-  },
-  {
-    name: "Kathryn Murphy",
-    avatar: "/avatars/user3.jpeg",
-    status: "online",
-    message:
-      "The best way to treat an ear infection is to visit your local vet clinic and get a prescription for ear drops. The ear drops will help clear the infection and reduce th",
-    time: "Wed",
-    unread: 2,
-  },
-  {
-    name: "James Grey",
-    avatar: "/avatars/user2.jpeg",
-    status: "offline",
-    message:
-      "You should follow the instructions on the ear drops label, but usually you need to apply them twice a day for 7 to 10 days. You should clean her ears once a day, preferably before applying the ear drops",
-    time: "Tue",
-    unread: 0,
-  },
-  {
-    name: "Jim Brown",
-    avatar: "/avatars/user1.jpeg",
-    status: "offline",
-    message: "Hi, I have a question about my cat.",
-    time: "Tue",
-    unread: 0,
-  },
-];
+import { ref } from "vue";
+import { chatsData } from "@/utils/chats";
+
+const chats = ref(chatsData);
+const selectedChat = ref<any>(null);
+const overlay = ref(false);
+
+const openChatOverlay = (chat: any) => {
+  selectedChat.value = chat;
+  overlay.value = true;
+};
 </script>
 
 <style scoped>
@@ -98,10 +94,19 @@ const chats = [
   background-color: #f44336;
 }
 
+.chat-row {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.chat-row:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
 .avatar-img {
   width: 40px;
   height: 40px;
-  border-radius: 20%;
+  border-radius: 50%;
   object-fit: cover;
 }
 

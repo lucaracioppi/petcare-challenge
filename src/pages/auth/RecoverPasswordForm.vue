@@ -45,7 +45,6 @@
           </v-btn>
         </v-form>
 
-        <!-- Separador -->
         <v-divider class="mt-6 mb-2" />
 
         <p class="text-body-2 text-textPrimary">

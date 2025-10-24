@@ -50,10 +50,8 @@
           </v-btn>
         </v-form>
 
-        <!-- Separador -->
         <v-divider class="mt-6 mb-2" />
 
-        <!-- Textos secundarios -->
         <p class="text-body-2 text-textPrimary">
           Don't have an account?
           <v-btn

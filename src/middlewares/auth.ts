@@ -6,17 +6,15 @@ export function authMiddleware(to: any, from: any, next: any) {
   const isAuth = authStore.isAuthenticated;
   const authPages = ["/login", "/register", "/recover-password"];
 
-  // Si el usuario NO está autenticado
+  // user NOT authenticated - only allow auth pages
   if (!isAuth && !authPages.includes(to.path)) {
-    // Solo puede acceder a las páginas de login/register/recover
     return next("/login");
   }
 
-  // Si el usuario está autenticado y trata de ir a una página pública
+  // user authenticated - not access auth pages
   if (isAuth && authPages.includes(to.path)) {
     return next("/dashboard");
   }
 
-  // Caso normal
   next();
 }

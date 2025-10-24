@@ -25,14 +25,14 @@
     <!-- Circular progress -->
     <div class="position-relative d-flex align-center justify-center mt-2">
       <v-progress-circular
-        :model-value="progress"
+        :model-value="currentProgress"
         :size="200"
         :width="15"
         :color="progressColor"
         class="mb-2"
       />
       <div class="position-absolute text-h3 font-weight-bold text-textPrimary">
-        {{ progress }}%
+        {{ currentProgress }}%
       </div>
     </div>
   </v-card>
@@ -42,33 +42,28 @@
 import { ref, computed } from "vue";
 
 interface Props {
-  progress: number;
   title: string;
+  progress: Record<string, number>;
 }
 
 const props = defineProps<Props>();
 
-// Select de periodo
-const periodOptions = ["Daily", "Weekly", "Monthly"];
-const selectedPeriod = ref("Daily");
+const periodOptions = Object.keys(props.progress);
+const selectedPeriod = ref<string>(periodOptions[0] || "");
 
-// Color dinámico según progreso
+const currentProgress = computed(
+  () => props.progress[selectedPeriod.value] ?? 0
+);
+
 const progressColor = computed(() => {
-  if (props.progress < 40) return "error"; // rojo
-  if (props.progress < 75) return "warning"; // amarillo
-  return "success"; // verde
+  if (currentProgress.value < 40) return "error";
+  if (currentProgress.value < 75) return "warning";
+  return "success";
 });
 </script>
 
 <style scoped>
 .v-card {
-  border-radius: 16px;
   min-width: 180px;
-  background-color: #f9fbfd;
-}
-
-.v-progress-circular {
-  background-color: #eef2f6;
-  border-radius: 50%;
 }
 </style>
