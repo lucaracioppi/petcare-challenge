@@ -6,19 +6,19 @@
 
 // Composables
 import { createRouter, createWebHistory } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
+import { authMiddleware } from "@/middlewares/auth";
 
 const routes = [
-  { path: "/login", component: () => import("@/views/auth/LoginForm.vue") },
+  { path: "/login", component: () => import("@/pages/auth/LoginForm.vue") },
   {
     path: "/register",
-    component: () => import("@/views/auth/RegisterForm.vue"),
+    component: () => import("@/pages/auth/RegisterForm.vue"),
   },
   {
     path: "/recover-password",
-    component: () => import("@/views/auth/RecoverPasswordForm.vue"),
+    component: () => import("@/pages/auth/RecoverPasswordForm.vue"),
   },
-  { path: "/dashboard", component: () => import("@/views/DashboardView.vue") },
+  { path: "/dashboard", component: () => import("@/pages/DashboardPage.vue") },
 ];
 
 const router = createRouter({
@@ -41,19 +41,7 @@ router.onError((err, to) => {
   }
 });
 
-router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore();
-  if (to.path === "/dashboard" && !authStore.isAuthenticated) {
-    next("/login");
-  } else if (
-    authStore.isAuthenticated &&
-    ["/login", "/register", "/recover-password"].includes(to.path)
-  ) {
-    next("/dashboard");
-  } else {
-    next();
-  }
-});
+router.beforeEach(authMiddleware);
 
 router.isReady().then(() => {
   localStorage.removeItem("vuetify:dynamic-reload");
