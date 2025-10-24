@@ -28,6 +28,7 @@
           variant="outlined"
           class="w-auto"
           style="max-width: 120px"
+          :disabled="!(selects && selects.length)"
         />
       </div>
     </div>
@@ -43,23 +44,27 @@
         </tr>
       </thead>
       <tbody class="text-textPrimary">
+        <tr v-if="filteredVaccines.length === 0">
+          <td colspan="4" class="text-center opacity-50">No vaccines found</td>
+        </tr>
+
         <tr
           v-for="(vaccine, index) in filteredVaccines"
           :key="index"
           height="80"
         >
-          <td>{{ vaccine.name }}</td>
+          <td>{{ vaccine.name ?? "Unknown" }}</td>
           <td>
             <v-btn
-              :color="getTypeColor(vaccine.type)"
+              :color="getTypeColor(vaccine.type ?? '')"
               variant="tonal"
               size="small"
               class="w-75"
             >
-              {{ vaccine.type }}
+              {{ vaccine.type ?? "Unknown" }}
             </v-btn>
           </td>
-          <td>{{ vaccine.date }}</td>
+          <td>{{ vaccine.date ?? "-" }}</td>
           <td class="text-right">
             <v-btn
               :color="!vaccine.vet ? 'primary' : 'textPrimary opacity-70'"
@@ -92,8 +97,9 @@
             variant="outlined"
             class="opacity-70"
             @click="vetDialog = false"
-            >Cancel</v-btn
           >
+            Cancel
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -102,33 +108,40 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
-import { vaccinesData, vets } from "@/utils/vaccination";
+import { vaccinesData, vets as vetsData } from "@/utils/vaccination";
+import type { Vaccine, Vet } from "@/interfaces/vaccination";
 
-const search = ref("");
-const order = ref("By type");
-const selects = ["By type", "By date"];
+const search = ref<string>("");
 
-const vaccines = ref([...vaccinesData]);
+const selects = ["By type", "By date"] as const;
+type OrderType = (typeof selects)[number];
+const order = ref<OrderType>(selects[0]);
 
-const vetDialog = ref(false);
-const selectedVaccine = ref<any>(null);
+const vaccines = ref<Vaccine[]>([...(vaccinesData ?? [])]);
 
-const filteredVaccines = computed(() => {
-  let filtered = vaccines.value;
+const vetDialog = ref<boolean>(false);
+const selectedVaccine = ref<Vaccine | null>(null);
+const vets: Vet[] = vetsData ?? [];
+
+const filteredVaccines = computed<Vaccine[]>(() => {
+  let filtered = vaccines.value ?? [];
 
   // Filter by search
   if (search.value) {
-    filtered = filtered.filter((v) =>
-      v.name.toLowerCase().includes(search.value.toLowerCase())
+    filtered = filtered.filter((v: Vaccine) =>
+      (v.name ?? "").toLowerCase().includes(search.value.toLowerCase())
     );
   }
 
-  // Order by selects
+  // Order by type or date
   if (order.value === "By type") {
-    filtered = [...filtered].sort((a, b) => a.type.localeCompare(b.type));
+    filtered = [...filtered].sort((a, b) =>
+      (a.type ?? "").localeCompare(b.type ?? "")
+    );
   } else if (order.value === "By date") {
     filtered = [...filtered].sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+      (a, b) =>
+        new Date(a.date ?? 0).getTime() - new Date(b.date ?? 0).getTime()
     );
   }
 
@@ -136,26 +149,27 @@ const filteredVaccines = computed(() => {
 });
 
 const shuffleArray = <T>(array: T[]): T[] =>
-  array
+  (array ?? [])
     .map((a) => ({ sort: Math.random(), value: a }))
     .sort((a, b) => a.sort - b.sort)
     .map((a) => a.value);
 
-const getTypeColor = (type: string) => {
+const getTypeColor = (type: Vaccine["type"] | string): string => {
   const colors: Record<string, string> = {
     Overdue: "error",
     Noncore: "warning",
     Core: "success",
   };
-  return colors[type] || "grey";
+  return colors[type] ?? "grey";
 };
 
-const openVetDialog = (vaccine: any) => {
+const openVetDialog = (vaccine: Vaccine | null): void => {
+  if (!vaccine) return;
   selectedVaccine.value = vaccine;
   vetDialog.value = true;
 };
 
-const selectVet = (vet: string) => {
+const selectVet = (vet: Vet): void => {
   if (selectedVaccine.value) {
     selectedVaccine.value.vet = vet;
   }
@@ -163,7 +177,6 @@ const selectVet = (vet: string) => {
   selectedVaccine.value = null;
 };
 
-// Mix data
 onMounted(() => {
   vaccines.value = shuffleArray(vaccines.value);
 });

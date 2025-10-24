@@ -6,9 +6,10 @@
 
 // Composables
 import { createRouter, createWebHistory } from "vue-router";
+import type { RouteRecordRaw } from "vue-router";
 import { authMiddleware } from "@/middlewares/auth";
 
-const routes = [
+const routes: RouteRecordRaw[] = [
   { path: "/login", component: () => import("@/pages/auth/LoginForm.vue") },
   {
     path: "/register",

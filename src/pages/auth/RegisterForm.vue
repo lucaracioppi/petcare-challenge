@@ -13,6 +13,7 @@
             variant="outlined"
             required
           />
+
           <v-text-field
             label="Password"
             v-model="password"
@@ -29,6 +30,7 @@
             class="mt-4"
             elevation="0"
             block
+            :disabled="!email.trim() || !password.trim()"
           >
             Register
           </v-btn>
@@ -64,8 +66,8 @@ import AuthLayout from "@/layouts/AuthLayout.vue";
 const router = useRouter();
 const authStore = useAuthStore();
 
-const email = ref("");
-const password = ref("");
+const email = ref<string>("");
+const password = ref<string>("");
 
 const formRef = ref<InstanceType<typeof VForm>>();
 
@@ -73,23 +75,37 @@ const rulesEmail = [
   (v: string) => !!v || "Email is required",
   (v: string) => /.+@.+\..+/.test(v) || "Invalid email",
 ];
-
 const rulesPassword = [
   (v: string) => !!v || "Password is required",
   (v: string) => v.length >= 4 || "Password must be at least 4 characters",
 ];
 
 const handleRegister = () => {
-  if (!formRef.value?.validate()) return;
+  // Validation
+  if (!formRef.value || !formRef.value.validate()) return;
+
+  // Sanitize inputs
+  const safeEmail = (email.value || "").trim();
+  const safePassword = (password.value || "").trim();
+
+  if (!safeEmail || !safePassword) return;
 
   try {
-    authStore.register(email.value, password.value);
-    alert("User registered successfully.");
-    router.push("/login");
+    const result =
+      typeof authStore.register === "function"
+        ? authStore.register(safeEmail, safePassword)
+        : false;
+
+    if (result) {
+      alert("User registered successfully.");
+      router.push("/login").catch(() => {});
+    } else {
+      alert("User already exists or registration failed.");
+    }
   } catch (err: any) {
-    alert(err.message || "User already exists.");
+    alert(err.message || "User already exists or registration failed.");
   }
 };
 
-const goToLogin = () => router.push("/login");
+const goToLogin = () => router.push("/login").catch(() => {});
 </script>

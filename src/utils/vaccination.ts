@@ -1,4 +1,6 @@
-export const vaccinesData = [
+import type { Vaccine, Vet } from "@/interfaces/vaccination";
+
+export const vaccinesData: Vaccine[] = [
   { name: "Rabies", type: "Overdue", date: "01 Dec 2023", vet: "" },
   {
     name: "Bordetella",
@@ -15,4 +17,4 @@ export const vaccinesData = [
   },
 ];
 
-export const vets = ["Dr. Alice", "Dr. Bob", "Dr. Carol"];
+export const vets: Vet[] = ["Dr. Alice", "Dr. Bob", "Dr. Carol"];

@@ -1,11 +1,4 @@
-export interface Chat {
-  name: string;
-  avatar: string;
-  status: "online" | "offline" | "away";
-  message: string;
-  time: string;
-  unread: number;
-}
+import type { Chat } from "@/interfaces/chat";
 
 export const chatsData: Chat[] = [
   {

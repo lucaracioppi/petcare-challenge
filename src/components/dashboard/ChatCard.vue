@@ -15,42 +15,55 @@
         v-for="(chat, index) in chats"
         :key="index"
         class="align-center chat-row"
-        style="cursor: pointer"
         @click="openChatOverlay(chat)"
       >
         <v-col cols="1">
-          <span v-if="chat.status" :class="['status-dot', chat.status]"></span>
-          <img :src="chat.avatar" alt="avatar" class="avatar-img" />
+          <span v-if="chat?.status" :class="['status-dot', chat.status]"></span>
+          <img
+            :src="chat?.avatar || '/avatars/placeholder-avatar.png'"
+            alt="avatar"
+            class="avatar-img"
+          />
         </v-col>
 
         <v-col cols="10 text-textPrimary">
-          <p>{{ chat.name }}</p>
+          <p>{{ chat?.name || "Unknown" }}</p>
           <v-card-subtitle class="pa-0 opacity-70">
-            {{ chat.message.slice(0, 50)
-            }}{{ chat.message.length > 50 ? "..." : "" }}
+            {{ chat?.message?.slice(0, 50) || "" }}
+            {{ chat?.message && chat.message.length > 50 ? "..." : "" }}
           </v-card-subtitle>
         </v-col>
 
         <v-col cols="1" class="pa-0">
-          <span class="text-textPrimary opacity-70" style="font-size: 14px">{{
-            chat.time
-          }}</span>
-          <div v-if="chat.unread" class="bg-error unread-badge">
+          <span class="text-textPrimary opacity-70" style="font-size: 14px">
+            {{ chat?.time || "--:--" }}
+          </span>
+          <div v-if="chat?.unread" class="bg-error unread-badge">
             {{ chat.unread }}
           </div>
+        </v-col>
+      </v-row>
+
+      <!-- fallback if no chats -->
+      <v-row v-if="!chats || chats.length === 0" class="justify-center">
+        <v-col cols="12" class="text-center opacity-50">
+          No chats available
         </v-col>
       </v-row>
     </div>
 
     <!-- Overlay - Complete message -->
     <v-dialog v-model="overlay" max-width="400">
-      <v-card>
+      <v-card v-if="selectedChat">
         <v-card-title class="d-flex align-center mt-4">
-          <img :src="selectedChat?.avatar" class="avatar-img me-2" />
-          <span>{{ selectedChat?.name }}</span>
+          <img
+            :src="selectedChat?.avatar || '/avatars/placeholder-avatar.png'"
+            class="avatar-img me-2"
+          />
+          <span>{{ selectedChat?.name || "Unknown" }}</span>
         </v-card-title>
         <v-card-text>
-          <p>{{ selectedChat?.message }}</p>
+          <p>{{ selectedChat?.message || "" }}</p>
         </v-card-text>
         <v-card-actions>
           <v-spacer />
@@ -63,13 +76,15 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import type { Chat } from "@/interfaces/chat";
 import { chatsData } from "@/utils/chats";
 
-const chats = ref(chatsData);
-const selectedChat = ref<any>(null);
+const chats = ref<Chat[]>(Array.isArray(chatsData) ? chatsData : []);
+const selectedChat = ref<Chat | null>(null);
 const overlay = ref(false);
 
-const openChatOverlay = (chat: any) => {
+const openChatOverlay = (chat: Chat | null) => {
+  if (!chat) return;
   selectedChat.value = chat;
   overlay.value = true;
 };

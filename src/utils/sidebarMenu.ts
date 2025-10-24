@@ -1,4 +1,6 @@
-export const sidebarMenu = {
+import type { SidebarMenu } from "@/interfaces/sidebar";
+
+export const sidebarMenu: SidebarMenu = {
   menu: {
     title: "Menu",
     items: [

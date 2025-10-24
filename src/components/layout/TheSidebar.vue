@@ -31,47 +31,52 @@
         density="comfortable"
         class="mt-10 flex-grow-1 overflow-auto"
       >
-        <template v-for="(section, key) in menu" :key="key">
+        <template v-for="(section, key) in menu || []" :key="key">
           <v-list-subheader class="sidebar-title">
-            {{ section.title }}
+            {{ section?.title || "No Title" }}
           </v-list-subheader>
 
           <v-list-item
-            v-for="item in section.items"
-            :key="item.title"
-            :to="item.to"
+            v-for="item in section?.items || []"
+            :key="item?.title || key"
+            :to="item?.to || ''"
             :ripple="true"
             clickable
             class="sidebar-item d-flex align-center justify-space-between"
-            :class="{ 'bg-primary': isActive(item.to) }"
+            :class="{ 'bg-primary': isActive(item?.to || '') }"
           >
             <div class="d-flex align-center">
               <v-icon
                 :color="
-                  isActive(item.to) ? 'secondary' : 'textPrimary opacity-70'
+                  isActive(item?.to || '')
+                    ? 'secondary'
+                    : 'textPrimary opacity-70'
                 "
                 size="20"
                 class="mr-3"
               >
-                {{ item.icon }}
+                {{ item?.icon || "mdi-help-circle-outline" }}
               </v-icon>
               <v-list-item-title
                 :class="
-                  isActive(item.to)
+                  isActive(item?.to || '')
                     ? 'text-secondary'
                     : 'text-textPrimary opacity-70'
                 "
               >
-                {{ item.title }}
+                {{ item?.title || "Untitled" }}
               </v-list-item-title>
             </div>
 
             <!-- Extra content -->
             <template v-slot:append>
-              <div v-if="item.to === '/appointments'" class="position-relative">
+              <div
+                v-if="item?.to === '/appointments'"
+                class="position-relative"
+              >
                 <v-badge
                   color="error"
-                  content="2"
+                  :content="2"
                   inline
                   bordered
                   class="mr-2"
@@ -79,13 +84,13 @@
               </div>
 
               <div
-                v-else-if="item.to === '/chat'"
+                v-else-if="item?.to === '/chat'"
                 class="d-flex align-center justify-end user-avatars"
               >
                 <img
-                  v-for="(src, index) in chatUsers"
+                  v-for="(src, index) in chatUsers || []"
                   :key="index"
-                  :src="src"
+                  :src="src || '/avatars/placeholder-avatar.png'"
                   alt="User"
                   class="chat-avatar"
                   :style="{ left: `${index * 14}px` }"
@@ -122,26 +127,32 @@ import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { sidebarMenu } from "@/utils/sidebarMenu";
+import type { SidebarMenu as SidebarMenuType } from "@/interfaces/sidebar";
 
 const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
 
-const drawer = ref(true);
-const rail = ref(false);
+const drawer = ref<boolean>(true);
+const rail = ref<boolean>(false);
 
-const isActive = (path: string) => route.path === path;
+const isActive = (path: string) => (route.path || "") === (path || "");
 
-const menu = sidebarMenu;
-const chatUsers = [
+const menu: SidebarMenuType = sidebarMenu || [];
+
+const chatUsers = ref<string[]>([
   "/avatars/user1.jpeg",
   "/avatars/user2.jpeg",
   "/avatars/user3.jpeg",
-];
+]);
 
 const handleLogout = () => {
-  authStore.logout();
-  router.push("/login");
+  try {
+    authStore.logout();
+    router.push("/login");
+  } catch (e) {
+    console.error("Logout failed", e);
+  }
 };
 </script>
 

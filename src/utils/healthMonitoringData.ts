@@ -1,13 +1,21 @@
-export const periods = ["Daily", "Weekly", "Monthly"];
+import type {
+  Period,
+  Metric,
+  MetricsValues,
+  PeriodLabels,
+  ExampleValues,
+} from "@/interfaces/healthMonitoring";
 
-export const metrics = [
+export const periods: Period[] = ["Daily", "Weekly", "Monthly"];
+
+export const metrics: Metric[] = [
   { key: "stress", label: "Stress level", icon: "mdi-heart-flash" },
   { key: "pulse", label: "Pulse", icon: "mdi-pulse" },
   { key: "temperature", label: "Temperature", icon: "mdi-thermometer" },
   { key: "calories", label: "Calories burned", icon: "mdi-fire" },
 ];
 
-export const metricsValues: Record<string, Record<string, number[]>> = {
+export const metricsValues: MetricsValues = {
   stress: {
     Daily: [2, 5, 3, 6, 4, 7, 5, 6, 3, 4],
     Weekly: [3, 7, 4, 9, 6, 10, 5, 8, 2, 7],
@@ -30,10 +38,10 @@ export const metricsValues: Record<string, Record<string, number[]>> = {
   },
 };
 
-export const periodLabels: Record<string, string[]> = {
+export const periodLabels: PeriodLabels = {
   Daily: ["Monday", "Tuesday", "Wednesday", "Thursday"],
   Weekly: ["Week 1", "Week 2", "Week 3", "Week 4"],
   Monthly: ["October", "November", "December", "January"],
 };
 
-export const exampleValues = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+export const exampleValues: ExampleValues = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];

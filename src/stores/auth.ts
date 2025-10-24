@@ -1,8 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed, watch } from "vue";
-
-type StoredUser = { email: string; password: string };
-type AuthUser = { email: string } | null;
+import type { StoredUser, AuthUser } from "@/interfaces/auth";
 
 export const useAuthStore = defineStore("auth", () => {
   const users = ref<StoredUser[]>([
@@ -16,6 +14,8 @@ export const useAuthStore = defineStore("auth", () => {
   const isAuthenticated = computed(() => user.value !== null);
 
   const login = (email: string, password: string) => {
+    if (!email || !password) return false;
+
     const foundUser = users.value.find(
       (u) => u.email === email && u.password === password
     );
@@ -27,6 +27,8 @@ export const useAuthStore = defineStore("auth", () => {
   };
 
   const register = (email: string, password: string) => {
+    if (!email || !password) return false;
+
     const exists = users.value.some((u) => u.email === email);
     if (!exists) {
       users.value.push({ email, password });
@@ -36,6 +38,8 @@ export const useAuthStore = defineStore("auth", () => {
   };
 
   const recoverPassword = (email: string, newPassword: string) => {
+    if (!email || !newPassword) return false;
+
     const u = users.value.find((u) => u.email === email);
     if (u) {
       u.password = newPassword;
@@ -50,7 +54,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   // Automatic persistence in localStorage
   watch(user, (newUser) => {
-    localStorage.setItem("auth_user", JSON.stringify(newUser));
+    localStorage.setItem("auth_user", JSON.stringify(newUser || null));
   });
 
   return {

@@ -13,6 +13,7 @@
             variant="outlined"
             required
           />
+
           <v-text-field
             label="Password"
             v-model="password"
@@ -21,6 +22,7 @@
             variant="outlined"
             required
           />
+
           <p
             class="text-right text-body-2 text-textPrimary"
             style="margin-top: -1rem"
@@ -45,6 +47,7 @@
             class="mt-6"
             elevation="0"
             block
+            :disabled="!email.trim() || !password.trim()"
           >
             Login
           </v-btn>
@@ -80,8 +83,8 @@ import AuthLayout from "@/layouts/AuthLayout.vue";
 const router = useRouter();
 const authStore = useAuthStore();
 
-const email = ref("");
-const password = ref("");
+const email = ref<string>("");
+const password = ref<string>("");
 
 const formRef = ref<InstanceType<typeof VForm>>();
 
@@ -96,15 +99,28 @@ const rulesPassword = [
 ];
 
 const handleLogin = () => {
-  if (!formRef.value?.validate()) return;
+  // Validation
+  if (!formRef.value || !formRef.value.validate()) return;
 
-  if (authStore.login(email.value, password.value)) {
-    router.push("/dashboard");
+  // Sanitize inputs
+  const safeEmail = (email.value || "").trim();
+  const safePassword = (password.value || "").trim();
+
+  if (!safeEmail || !safePassword) return;
+
+  const loginResult =
+    typeof authStore.login === "function"
+      ? authStore.login(safeEmail, safePassword)
+      : false;
+
+  if (loginResult) {
+    router.push("/dashboard").catch(() => {});
   } else {
     alert("Invalid credentials or user not found.");
   }
 };
 
-const goToRegister = () => router.push("/register");
-const goToRecoverPassword = () => router.push("/recover-password");
+const goToRegister = () => router.push("/register").catch(() => {});
+const goToRecoverPassword = () =>
+  router.push("/recover-password").catch(() => {});
 </script>

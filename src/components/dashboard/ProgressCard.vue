@@ -7,7 +7,7 @@
     <!-- Header -->
     <div class="d-flex justify-space-between align-center w-100 mb-4">
       <span class="text-subtitle-2 text-textPrimary text-uppercase opacity-70">
-        {{ title }}
+        {{ title || "Progress" }}
       </span>
 
       <v-select
@@ -19,6 +19,7 @@
         variant="outlined"
         class="w-auto"
         style="max-width: 120px"
+        :disabled="periodOptions.length === 0"
       />
     </div>
 
@@ -26,8 +27,8 @@
     <div class="position-relative d-flex align-center justify-center mt-2">
       <v-progress-circular
         :model-value="currentProgress"
-        :size="200"
-        :width="15"
+        :size="size"
+        :width="width"
         :color="progressColor"
         class="mb-2"
       />
@@ -35,27 +36,31 @@
         {{ currentProgress }}%
       </div>
     </div>
+
+    <div v-if="periodOptions.length === 0" class="text-center opacity-50 mt-2">
+      No data available
+    </div>
   </v-card>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import type { ProgressProps, Period } from "@/interfaces/progress";
 
-interface Props {
-  title: string;
-  progress: Record<string, number>;
-}
+const props = defineProps<ProgressProps>();
 
-const props = defineProps<Props>();
+const title = props.title || "Progress";
+const size = props.size ?? 200;
+const width = props.width ?? 15;
 
-const periodOptions = Object.keys(props.progress);
-const selectedPeriod = ref<string>(periodOptions[0] || "");
+const periodOptions: Period[] = Object.keys(props.progress ?? {}) as Period[];
+const selectedPeriod = ref<Period>(periodOptions[0] ?? ("Daily" as Period));
 
-const currentProgress = computed(
-  () => props.progress[selectedPeriod.value] ?? 0
+const currentProgress = computed<number>(
+  () => props.progress?.[selectedPeriod.value] ?? 0
 );
 
-const progressColor = computed(() => {
+const progressColor = computed<string>(() => {
   if (currentProgress.value < 40) return "error";
   if (currentProgress.value < 75) return "warning";
   return "success";
