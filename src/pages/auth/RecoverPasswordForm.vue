@@ -8,6 +8,7 @@
         <v-form ref="formRef">
           <v-text-field
             label="Email"
+            placeholder="example@email.com"
             v-model="email"
             type="email"
             :rules="rulesEmail"
@@ -18,6 +19,7 @@
 
           <v-text-field
             label="New Password"
+            placeholder="********"
             v-model="newPassword"
             type="password"
             :rules="rulesPassword"
@@ -28,6 +30,7 @@
 
           <v-text-field
             label="Confirm Password"
+            placeholder="********"
             v-model="confirmPassword"
             type="password"
             :rules="rulesConfirmPassword"
@@ -42,9 +45,7 @@
             class="mt-4"
             elevation="0"
             block
-            :disabled="
-              !email.trim() || !newPassword.trim() || !confirmPassword.trim()
-            "
+            :disabled="!isFormValid"
           >
             Recover Password
           </v-btn>
@@ -71,14 +72,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
+import { useToastStore } from "@/stores/toastStore";
 import { VForm } from "vuetify/components";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
+const toast = useToastStore();
 
 const email = ref<string>("");
 const newPassword = ref<string>("");
@@ -99,14 +102,24 @@ const rulesConfirmPassword = [
   (v: string) => v === newPassword.value || "Passwords must match",
 ];
 
+const isFormValid = computed(() => {
+  const emailValid = rulesEmail.every((rule) => rule(email.value) === true);
+  const newPasswordValid = rulesPassword.every(
+    (rule) => rule(newPassword.value) === true
+  );
+  const confirmPasswordValid = rulesConfirmPassword.every(
+    (rule) => rule(confirmPassword.value) === true
+  );
+  return emailValid && newPasswordValid && confirmPasswordValid;
+});
+
 const handleRecoverPassword = () => {
   // Validation
   if (!formRef.value || !formRef.value.validate()) return;
 
-  // Sanitize inputs
-  const safeEmail = (email.value || "").trim();
-  const safeNewPassword = (newPassword.value || "").trim();
-  const safeConfirmPassword = (confirmPassword.value || "").trim();
+  const safeEmail = email.value.trim();
+  const safeNewPassword = newPassword.value.trim();
+  const safeConfirmPassword = confirmPassword.value.trim();
 
   if (!safeEmail || !safeNewPassword || !safeConfirmPassword) return;
   if (safeNewPassword !== safeConfirmPassword) return;
@@ -117,10 +130,10 @@ const handleRecoverPassword = () => {
       : false;
 
   if (result) {
-    alert("Password updated successfully.");
+    toast.trigger("Password updated successfully.", "success");
     router.push("/login").catch(() => {});
   } else {
-    alert("User not found.");
+    toast.trigger("User not found.", "error");
   }
 };
 

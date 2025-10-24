@@ -6,6 +6,7 @@
         <v-form ref="formRef">
           <v-text-field
             label="Email"
+            placeholder="example@email.com"
             v-model="email"
             type="email"
             :rules="rulesEmail"
@@ -16,6 +17,7 @@
 
           <v-text-field
             label="Password"
+            placeholder="********"
             v-model="password"
             type="password"
             :rules="rulesPassword"
@@ -30,7 +32,7 @@
             class="mt-4"
             elevation="0"
             block
-            :disabled="!email.trim() || !password.trim()"
+            :disabled="!isFormValid"
           >
             Register
           </v-btn>
@@ -57,14 +59,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
+import { useToastStore } from "@/stores/toastStore";
 import { VForm } from "vuetify/components";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
+const toast = useToastStore();
 
 const email = ref<string>("");
 const password = ref<string>("");
@@ -80,14 +84,20 @@ const rulesPassword = [
   (v: string) => v.length >= 4 || "Password must be at least 4 characters",
 ];
 
+const isFormValid = computed(() => {
+  const emailValid = rulesEmail.every((rule) => rule(email.value) === true);
+  const passwordValid = rulesPassword.every(
+    (rule) => rule(password.value) === true
+  );
+  return emailValid && passwordValid;
+});
+
 const handleRegister = () => {
   // Validation
   if (!formRef.value || !formRef.value.validate()) return;
 
-  // Sanitize inputs
-  const safeEmail = (email.value || "").trim();
-  const safePassword = (password.value || "").trim();
-
+  const safeEmail = email.value.trim();
+  const safePassword = password.value.trim();
   if (!safeEmail || !safePassword) return;
 
   try {
@@ -97,10 +107,10 @@ const handleRegister = () => {
         : false;
 
     if (result) {
-      alert("User registered successfully.");
+      toast.trigger("User registered successfully.", "success");
       router.push("/login").catch(() => {});
     } else {
-      alert("User already exists or registration failed.");
+      toast.trigger("User already exists or registration failed.", "error");
     }
   } catch (err: any) {
     alert(err.message || "User already exists or registration failed.");
