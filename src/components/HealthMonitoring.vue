@@ -21,7 +21,7 @@
     <v-sheet
       color="secondary"
       rounded="lg"
-      class="d-flex ga-4 mb-6 pa-2 border"
+      class="d-flex flex-wrap ga-4 mb-6 pa-2 border"
     >
       <v-btn
         v-for="metric in metrics"
@@ -43,7 +43,7 @@
     <v-sheet color="secondary" class="pa-4 rounded-lg">
       <div class="d-flex">
         <!-- Eje Y (valores 1 a 10) -->
-        <div class="d-flex flex-column justify-space-between mr-2">
+        <div class="d-none d-md-flex flex-column justify-space-between mr-2">
           <span
             v-for="(val, index) in exampleValues"
             :key="index"
@@ -111,18 +111,7 @@ const metrics = [
 // Datos simulados
 const values = ref([3, 7, 4, 9, 6, 10, 5, 8, 2, 7]);
 const exampleValues = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]; // invertidos para eje Y visual
-const months = [
-  "Ene",
-  "Feb",
-  "Mar",
-  "Abr",
-  "May",
-  "Jun",
-  "Jul",
-  "Ago",
-  "Sep",
-  "Oct",
-];
+const months = ["September", "November", "December", "January"];
 </script>
 
 <style scoped>

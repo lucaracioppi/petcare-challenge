@@ -1,17 +1,17 @@
 <template>
   <DefaultLayout>
     <v-row>
-      <v-col cols="7">
-        <div class="d-flex ga-6 justify-space-between">
+      <v-col cols="12" lg="7">
+        <div class="d-md-flex ga-2 ga-xl-6 justify-space-between">
           <ProgressCard title="Activity" :progress="25" />
-          <ProgressCard title="Sleep" :progress="79" />
-          <ProgressCard title="Welness" :progress="52" />
+          <ProgressCard title="Sleep" :progress="79" class="mt-6 mt-md-0" />
+          <ProgressCard title="Welness" :progress="52" class="mt-6 mt-md-0" />
         </div>
         <div class="mt-6">
           <HealthMonitoring />
         </div>
       </v-col>
-      <v-col cols="5">
+      <v-col cols="12" lg="5">
         <VaccinationSchedule />
         <div class="mt-6">
           <ChatCard />

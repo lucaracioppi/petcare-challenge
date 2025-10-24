@@ -10,9 +10,9 @@
     permanent
     @click="rail = false"
   >
-    <!-- Contenedor principal -->
-    <div class="flex-grow-1">
-      <!-- Logo -->
+    <!-- Contenedor principal: scrollable si es necesario -->
+    <div class="flex-grow-1 d-flex flex-column">
+      <!-- Logo + toggle -->
       <div class="d-flex align-center justify-space-between">
         <div v-if="!rail" class="d-flex align-center mt-4 ml-4">
           <img src="/logo-petcare.png" alt="PetCare Logo" height="24" />
@@ -20,13 +20,18 @@
         <v-btn
           :icon="rail ? 'mdi-chevron-right' : 'mdi-chevron-left'"
           variant="text"
-          class="mt-4"
+          class="mt-4 opacity-60"
           @click.stop="rail = !rail"
         ></v-btn>
       </div>
 
-      <!-- Menú principal -->
-      <v-list v-if="!rail" nav density="comfortable" class="mt-10">
+      <!-- Menú principal (oculto en rail) -->
+      <v-list
+        v-if="!rail"
+        nav
+        density="comfortable"
+        class="mt-10 flex-grow-1 overflow-auto"
+      >
         <template v-for="(section, key) in menu" :key="key">
           <v-list-subheader class="sidebar-title">
             {{ section.title }}

@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="w-100 pa-4 d-flex flex-column align-center justify-center border"
+    class="pa-4 d-flex w-100 flex-column align-center justify-center border"
     elevation="0"
     rounded="lg"
   >
@@ -63,7 +63,7 @@ const progressColor = computed(() => {
 <style scoped>
 .v-card {
   border-radius: 16px;
-  min-width: 220px;
+  min-width: 180px;
   background-color: #f9fbfd;
 }
 

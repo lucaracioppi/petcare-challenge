@@ -1,15 +1,13 @@
 <template>
-  <v-app>
-    <TheSidebar />
-    <TheNavbar />
+  <TheSidebar />
+  <TheNavbar />
 
-    <!-- Main content -->
-    <v-main class="bg-accent">
-      <v-container fluid class="pa-6">
-        <slot />
-      </v-container>
-    </v-main>
-  </v-app>
+  <!-- Main content: el scroll principal se gestiona aquí -->
+  <v-main class="bg-accent">
+    <v-container fluid class="pa-6">
+      <slot />
+    </v-container>
+  </v-main>
 </template>
 
 <script setup lang="ts">
