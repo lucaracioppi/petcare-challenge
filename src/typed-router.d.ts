@@ -23,6 +23,7 @@ declare module 'vue-router/auto-routes' {
     '/auth/RecoverPasswordForm': RouteRecordInfo<'/auth/RecoverPasswordForm', '/auth/RecoverPasswordForm', Record<never, never>, Record<never, never>>,
     '/auth/RegisterForm': RouteRecordInfo<'/auth/RegisterForm', '/auth/RegisterForm', Record<never, never>, Record<never, never>>,
     '/DashboardPage': RouteRecordInfo<'/DashboardPage', '/DashboardPage', Record<never, never>, Record<never, never>>,
+    '/NotFoundPage': RouteRecordInfo<'/NotFoundPage', '/NotFoundPage', Record<never, never>, Record<never, never>>,
   }
 
   /**
@@ -54,6 +55,10 @@ declare module 'vue-router/auto-routes' {
     }
     'src/pages/DashboardPage.vue': {
       routes: '/DashboardPage'
+      views: never
+    }
+    'src/pages/NotFoundPage.vue': {
+      routes: '/NotFoundPage'
       views: never
     }
   }

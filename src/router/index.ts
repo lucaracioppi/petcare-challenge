@@ -19,6 +19,10 @@ const routes = [
     component: () => import("@/pages/auth/RecoverPasswordForm.vue"),
   },
   { path: "/dashboard", component: () => import("@/pages/DashboardPage.vue") },
+  {
+    path: "/:pathMatch(.*)*",
+    component: () => import("@/pages/NotFoundPage.vue"),
+  },
 ];
 
 const router = createRouter({

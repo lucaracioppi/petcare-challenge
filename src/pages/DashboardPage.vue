@@ -1,12 +1,9 @@
 <template>
-  <v-container>
-    <v-app-bar app>
-      <v-toolbar-title>PetCare Dashboard</v-toolbar-title>
-    </v-app-bar>
-    <v-main>
-      <router-view />
-    </v-main>
-  </v-container>
+  <DefaultLayout>
+    <h1>Bienvenido al Dashboard 🐾</h1>
+  </DefaultLayout>
 </template>
 
-<script setup lang="ts"></script>
+<script setup>
+import DefaultLayout from "@/layouts/DefaultLayout.vue";
+</script>

@@ -48,7 +48,7 @@
         <!-- Separador -->
         <v-divider class="mt-6 mb-2" />
 
-        <p class="text-body-2 text-textSecondary">
+        <p class="text-body-2 text-textPrimary">
           Remembered your password?
           <v-btn
             text
@@ -71,7 +71,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { VForm } from "vuetify/components";
-import AuthLayout from "@/layouts/Auth.vue";
+import AuthLayout from "@/layouts/AuthLayout.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();

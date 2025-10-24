@@ -27,7 +27,6 @@ export default createVuetify({
           success: "#4CAF50",
           warning: "#FFC107",
           textPrimary: "#0B1C33",
-          textSecondary: "rgba(11,28,51,0.7)",
         },
       },
     },
