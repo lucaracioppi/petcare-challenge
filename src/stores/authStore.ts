@@ -11,7 +11,7 @@ export const useAuthStore = defineStore("auth", () => {
     JSON.parse(localStorage.getItem("auth_user") || "null")
   );
 
-  const isAuthenticated = computed(() => user.value !== null);
+  const isAuthenticated = computed<boolean>(() => user.value !== null);
 
   const login = (email: string, password: string) => {
     if (!email || !password) return false;

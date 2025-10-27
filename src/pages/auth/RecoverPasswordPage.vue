@@ -74,9 +74,9 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
-import { useToastStore } from "@/stores/toastStore";
 import { VForm } from "vuetify/components";
+import { useAuthStore } from "@/stores/authStore";
+import { useToastStore } from "@/stores/toastStore";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 
 const router = useRouter();

@@ -1,13 +1,13 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import type { Ref } from "vue";
 
 type ToastColor = "success" | "error" | "info" | "warning";
 
 export const useToastStore = defineStore("toast", () => {
-  const show: Ref<boolean> = ref(false);
-  const message: Ref<string> = ref("");
-  const color: Ref<ToastColor> = ref("info");
+  const show = ref(false);
+  const message = ref("");
+  const color = ref<ToastColor>("info");
+
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
   function trigger(

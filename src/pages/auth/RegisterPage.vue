@@ -1,7 +1,7 @@
 <template>
   <AuthLayout>
     <template #default>
-      <v-card-title class="text-textPrimary mb-2">Login</v-card-title>
+      <v-card-title class="text-textPrimary mb-2">Register</v-card-title>
       <v-card-text>
         <v-form ref="formRef">
           <v-text-field
@@ -25,49 +25,32 @@
             required
           />
 
-          <p
-            class="text-right text-body-2 text-textPrimary"
-            style="margin-top: -1rem"
-          >
-            <v-btn
-              text
-              elevation="0"
-              size="small"
-              color="primary"
-              class="text-capitalize px-2"
-              variant="text"
-              @click="goToRecoverPassword"
-            >
-              Forgot Password?
-            </v-btn>
-          </p>
-
           <v-btn
-            @click="handleLogin"
+            @click="handleRegister"
             type="button"
             color="primary"
-            class="mt-6"
+            class="mt-4"
             elevation="0"
             block
             :disabled="!isFormValid"
           >
-            Login
+            Register
           </v-btn>
         </v-form>
 
         <v-divider class="mt-6 mb-2" />
 
         <p class="text-body-2 text-textPrimary">
-          Don't have an account?
+          Already have an account?
           <v-btn
             text
             elevation="0"
             color="primary"
             class="text-capitalize px-2"
             variant="text"
-            @click="goToRegister"
+            @click="goToLogin"
           >
-            Register
+            Login
           </v-btn>
         </p>
       </v-card-text>
@@ -78,9 +61,9 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
-import { useToastStore } from "@/stores/toastStore";
 import { VForm } from "vuetify/components";
+import { useAuthStore } from "@/stores/authStore";
+import { useToastStore } from "@/stores/toastStore";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 
 const router = useRouter();
@@ -92,6 +75,15 @@ const password = ref<string>("");
 
 const formRef = ref<InstanceType<typeof VForm>>();
 
+const rulesEmail = [
+  (v: string) => !!v || "Email is required",
+  (v: string) => /.+@.+\..+/.test(v) || "Invalid email",
+];
+const rulesPassword = [
+  (v: string) => !!v || "Password is required",
+  (v: string) => v.length >= 4 || "Password must be at least 4 characters",
+];
+
 const isFormValid = computed(() => {
   const emailValid = rulesEmail.every((rule) => rule(email.value) === true);
   const passwordValid = rulesPassword.every(
@@ -100,17 +92,7 @@ const isFormValid = computed(() => {
   return emailValid && passwordValid;
 });
 
-const rulesEmail = [
-  (v: string) => !!v || "Email is required",
-  (v: string) => /.+@.+\..+/.test(v) || "Invalid email",
-];
-
-const rulesPassword = [
-  (v: string) => !!v || "Password is required",
-  (v: string) => v.length >= 4 || "Password must be at least 4 characters",
-];
-
-const handleLogin = () => {
+const handleRegister = () => {
   // Validation
   if (!formRef.value || !formRef.value.validate()) return;
 
@@ -118,20 +100,22 @@ const handleLogin = () => {
   const safePassword = password.value.trim();
   if (!safeEmail || !safePassword) return;
 
-  const loginResult =
-    typeof authStore.login === "function"
-      ? authStore.login(safeEmail, safePassword)
-      : false;
+  try {
+    const result =
+      typeof authStore.register === "function"
+        ? authStore.register(safeEmail, safePassword)
+        : false;
 
-  if (loginResult) {
-    toast.trigger("Login successful!", "success");
-    router.push("/dashboard").catch(() => {});
-  } else {
-    toast.trigger("Invalid credentials or user not found.", "error");
+    if (result) {
+      toast.trigger("User registered successfully.", "success");
+      router.push("/login").catch(() => {});
+    } else {
+      toast.trigger("User already exists or registration failed.", "error");
+    }
+  } catch (err: any) {
+    alert(err.message || "User already exists or registration failed.");
   }
 };
 
-const goToRegister = () => router.push("/register").catch(() => {});
-const goToRecoverPassword = () =>
-  router.push("/recover-password").catch(() => {});
+const goToLogin = () => router.push("/login").catch(() => {});
 </script>

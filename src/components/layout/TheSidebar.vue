@@ -125,7 +125,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "@/stores/authStore";
 import { sidebarMenu } from "@/utils/sidebarMenu";
 import type { SidebarMenu as SidebarMenuType } from "@/interfaces/sidebar";
 
@@ -133,8 +133,8 @@ const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
 
-const drawer = ref<boolean>(true);
-const rail = ref<boolean>(false);
+const drawer = ref(true);
+const rail = ref(false);
 
 const isActive = (path: string) => (route.path || "") === (path || "");
 

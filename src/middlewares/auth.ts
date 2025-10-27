@@ -1,5 +1,5 @@
 import type { NavigationGuard } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "@/stores/authStore";
 
 export const authMiddleware: NavigationGuard = (to, from, next) => {
   const authStore = useAuthStore();

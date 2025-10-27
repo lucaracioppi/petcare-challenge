@@ -119,7 +119,7 @@ const order = ref<OrderType>(selects[0]);
 
 const vaccines = ref<Vaccine[]>([...(vaccinesData ?? [])]);
 
-const vetDialog = ref<boolean>(false);
+const vetDialog = ref(false);
 const selectedVaccine = ref<Vaccine | null>(null);
 const vets: Vet[] = vetsData ?? [];
 

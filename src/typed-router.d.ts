@@ -19,9 +19,9 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
-    '/auth/LoginForm': RouteRecordInfo<'/auth/LoginForm', '/auth/LoginForm', Record<never, never>, Record<never, never>>,
-    '/auth/RecoverPasswordForm': RouteRecordInfo<'/auth/RecoverPasswordForm', '/auth/RecoverPasswordForm', Record<never, never>, Record<never, never>>,
-    '/auth/RegisterForm': RouteRecordInfo<'/auth/RegisterForm', '/auth/RegisterForm', Record<never, never>, Record<never, never>>,
+    '/auth/LoginPage': RouteRecordInfo<'/auth/LoginPage', '/auth/LoginPage', Record<never, never>, Record<never, never>>,
+    '/auth/RecoverPasswordPage': RouteRecordInfo<'/auth/RecoverPasswordPage', '/auth/RecoverPasswordPage', Record<never, never>, Record<never, never>>,
+    '/auth/RegisterPage': RouteRecordInfo<'/auth/RegisterPage', '/auth/RegisterPage', Record<never, never>, Record<never, never>>,
     '/DashboardPage': RouteRecordInfo<'/DashboardPage', '/DashboardPage', Record<never, never>, Record<never, never>>,
     '/NotFoundPage': RouteRecordInfo<'/NotFoundPage', '/NotFoundPage', Record<never, never>, Record<never, never>>,
   }
@@ -41,16 +41,16 @@ declare module 'vue-router/auto-routes' {
       routes: '/'
       views: never
     }
-    'src/pages/auth/LoginForm.vue': {
-      routes: '/auth/LoginForm'
+    'src/pages/auth/LoginPage.vue': {
+      routes: '/auth/LoginPage'
       views: never
     }
-    'src/pages/auth/RecoverPasswordForm.vue': {
-      routes: '/auth/RecoverPasswordForm'
+    'src/pages/auth/RecoverPasswordPage.vue': {
+      routes: '/auth/RecoverPasswordPage'
       views: never
     }
-    'src/pages/auth/RegisterForm.vue': {
-      routes: '/auth/RegisterForm'
+    'src/pages/auth/RegisterPage.vue': {
+      routes: '/auth/RegisterPage'
       views: never
     }
     'src/pages/DashboardPage.vue': {

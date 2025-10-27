@@ -10,14 +10,14 @@ import type { RouteRecordRaw } from "vue-router";
 import { authMiddleware } from "@/middlewares/auth";
 
 const routes: RouteRecordRaw[] = [
-  { path: "/login", component: () => import("@/pages/auth/LoginForm.vue") },
+  { path: "/login", component: () => import("@/pages/auth/LoginPage.vue") },
   {
     path: "/register",
-    component: () => import("@/pages/auth/RegisterForm.vue"),
+    component: () => import("@/pages/auth/RegisterPage.vue"),
   },
   {
     path: "/recover-password",
-    component: () => import("@/pages/auth/RecoverPasswordForm.vue"),
+    component: () => import("@/pages/auth/RecoverPasswordPage.vue"),
   },
   { path: "/dashboard", component: () => import("@/pages/DashboardPage.vue") },
   {
