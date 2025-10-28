@@ -1,8 +1,9 @@
 <template>
   <DefaultLayout>
-    <v-row>
-      <v-col cols="12" lg="7">
-        <div class="d-md-flex ga-2 ga-xl-6 justify-space-between">
+    <div class="dashboard-grid w-100">
+      <!-- Left column -->
+      <div class="dashboard-left">
+        <div class="d-md-flex ga-6 justify-space-between">
           <ProgressCard
             title="Activity"
             :progress="{ Daily: 25, Weekly: 50, Monthly: 75 }"
@@ -21,14 +22,16 @@
         <div class="mt-6">
           <HealthMonitoring />
         </div>
-      </v-col>
-      <v-col cols="12" lg="5">
+      </div>
+
+      <!-- Right column -->
+      <div class="dashboard-right">
         <VaccinationSchedule />
         <div class="mt-6">
           <ChatCard />
         </div>
-      </v-col>
-    </v-row>
+      </div>
+    </div>
   </DefaultLayout>
 </template>
 
@@ -39,3 +42,30 @@ import VaccinationSchedule from "@/components/dashboard/VaccinationSchedule.vue"
 import HealthMonitoring from "@/components/dashboard/HealthMonitoring.vue";
 import ChatCard from "@/components/dashboard/ChatCard.vue";
 </script>
+
+<style scoped>
+.dashboard-grid {
+  display: flex;
+  gap: 24px; /* espacio entre columnas */
+}
+
+.dashboard-left {
+  width: 56%;
+  gap: 24px;
+}
+.dashboard-right {
+  width: 43%;
+  gap: 24px;
+}
+
+@media (max-width: 1365px) {
+  .dashboard-grid {
+    flex-direction: column;
+  }
+
+  .dashboard-left,
+  .dashboard-right {
+    width: 100%;
+  }
+}
+</style>

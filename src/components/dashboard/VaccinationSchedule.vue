@@ -1,23 +1,22 @@
 <template>
-  <v-card class="w-100 pa-4 border" elevation="0" rounded="lg">
+  <v-card class="w-100 pa-6 border" elevation="0" rounded="lg">
     <!-- Header -->
-    <div class="d-flex justify-space-between align-center mb-4">
-      <span class="text-subtitle-2 text-textPrimary text-uppercase opacity-70">
+    <div class="d-flex justify-space-between align-center mb-6">
+      <span class="text-body-1 text-textPrimary text-uppercase opacity-70">
         Vaccination Schedule
       </span>
 
-      <div class="d-flex align-center ga-4">
+      <div class="w-50 d-flex align-center ga-6">
         <v-text-field
           v-model="search"
           dense
           hide-details
-          placeholder="Search"
-          variant="outlined"
+          variant="plain"
+          elevation="0"
           clearable
           density="compact"
-          prepend-inner-icon="mdi-magnify"
-          class="w-auto"
-          style="max-width: 200px"
+          append-inner-icon="mdi-magnify"
+          class="w-25"
         />
 
         <v-select
@@ -26,8 +25,7 @@
           density="compact"
           hide-details
           variant="outlined"
-          class="w-auto"
-          style="max-width: 120px"
+          class="w-25"
           :disabled="!(selects && selects.length)"
         />
       </div>
@@ -35,7 +33,7 @@
 
     <!-- Table -->
     <v-table class="rounded-lg border">
-      <thead class="bg-accent text-textPrimary opacity-70" height="70">
+      <thead class="bg-accent text-textPrimary opacity-70">
         <tr>
           <th class="text-left">Name</th>
           <th class="text-left">Type</th>
@@ -48,18 +46,16 @@
           <td colspan="4" class="text-center opacity-50">No vaccines found</td>
         </tr>
 
-        <tr
-          v-for="(vaccine, index) in filteredVaccines"
-          :key="index"
-          height="80"
-        >
+        <tr v-for="(vaccine, index) in filteredVaccines" :key="index">
           <td>{{ vaccine.name ?? "Unknown" }}</td>
           <td>
             <v-btn
               :color="getTypeColor(vaccine.type ?? '')"
-              variant="tonal"
+              rounded="lg"
+              variant="outlined"
               size="small"
               class="w-75"
+              :class="`btn-${(vaccine.type ?? '').toLowerCase()}`"
             >
               {{ vaccine.type ?? "Unknown" }}
             </v-btn>
@@ -67,9 +63,11 @@
           <td>{{ vaccine.date ?? "-" }}</td>
           <td class="text-right">
             <v-btn
-              :color="!vaccine.vet ? 'primary' : 'textPrimary opacity-70'"
+              :color="!vaccine.vet ? 'primary' : 'textPrimary'"
               :variant="!vaccine.vet ? 'flat' : 'outlined'"
+              rounded="lg"
               class="text-none w-75"
+              :class="{ 'outlined-opacity': vaccine.vet }"
               @click="openVetDialog(vaccine)"
             >
               {{ vaccine.vet || "Find veterinary" }}
@@ -181,3 +179,47 @@ onMounted(() => {
   vaccines.value = shuffleArray(vaccines.value);
 });
 </script>
+
+<style scoped>
+.outlined-opacity {
+  border-color: rgba(var(--v-theme-textPrimary), 0.5) !important;
+}
+
+.btn-overdue {
+  background-color: rgba(var(--v-theme-error), 0.12);
+}
+.btn-noncore {
+  background-color: rgba(var(--v-theme-warning), 0.12);
+}
+.btn-core {
+  background-color: rgba(var(--v-theme-success), 0.12);
+}
+.btn-unknown {
+  background-color: rgba(var(--v-theme-grey), 0.12);
+}
+
+:deep(.v-table) {
+  thead tr {
+    height: 70px;
+  }
+  tbody tr {
+    height: 86px;
+  }
+
+  th,
+  td {
+    min-width: 6rem;
+    white-space: nowrap;
+  }
+}
+@media (max-width: 1599px) {
+  :deep(.v-table) {
+    thead tr {
+      height: 56px !important;
+    }
+    tbody tr {
+      height: 64px !important;
+    }
+  }
+}
+</style>

@@ -1,21 +1,20 @@
 <template>
-  <v-app-bar app color="secondary" flat height="72" class="pl-6 pr-6">
+  <v-app-bar app color="secondary" flat height="96" class="pl-6 pr-6">
     <!-- Search -->
     <v-text-field
       v-model="search"
       variant="outlined"
-      density="compact"
+      density="comfortable"
       placeholder="Search..."
       prepend-inner-icon="mdi-magnify"
       hide-details
-      class="mr-4"
-      style="max-width: 500px"
+      class="w-25"
     />
 
     <v-spacer />
 
     <!-- Icons -->
-    <div class="d-flex ga-6">
+    <div class="d-flex ga-3 ga-md-6">
       <v-icon size="24" color="textPrimary" class="opacity-70 cursor-pointer"
         >mdi-help-rhombus-outline</v-icon
       >
@@ -25,7 +24,12 @@
     </div>
 
     <!-- Add Widget -->
-    <v-btn color="primary" variant="flat" class="ml-6 text-none" rounded="lg">
+    <v-btn
+      color="primary"
+      variant="flat"
+      class="d-none d-md-flex ml-6 text-none"
+      rounded="lg"
+    >
       Add widget
     </v-btn>
   </v-app-bar>

@@ -1,12 +1,12 @@
 <template>
   <v-card
-    class="pa-4 d-flex w-100 flex-column align-center justify-center border"
+    class="w-100 d-flex flex-column align-center justify-center border"
     elevation="0"
     rounded="lg"
   >
     <!-- Header -->
-    <div class="d-flex justify-space-between align-center w-100 mb-4">
-      <span class="text-subtitle-2 text-textPrimary text-uppercase opacity-70">
+    <div class="d-flex justify-space-between align-center w-100 ga-2 mb-6 mt-2">
+      <span class="text-body-1 text-textPrimary text-uppercase opacity-70">
         {{ title || "Progress" }}
       </span>
 
@@ -24,15 +24,16 @@
     </div>
 
     <!-- Circular progress -->
-    <div class="position-relative d-flex align-center justify-center mt-2">
+    <div class="progress-wrapper d-flex align-center justify-center">
       <v-progress-circular
         :model-value="currentProgress"
-        :size="size"
-        :width="width"
+        :width="15"
         :color="progressColor"
-        class="mb-2"
+        class="progress-circle mb-2"
       />
-      <div class="position-absolute text-h3 font-weight-bold text-textPrimary">
+      <div
+        class="position-absolute text-h3 font-weight-medium text-textPrimary"
+      >
         {{ currentProgress }}%
       </div>
     </div>
@@ -50,8 +51,6 @@ import type { ProgressProps, Period } from "@/interfaces/progress";
 const props = defineProps<ProgressProps>();
 
 const title = props.title || "Progress";
-const size = props.size ?? 200;
-const width = props.width ?? 15;
 
 const periodOptions: Period[] = Object.keys(props.progress ?? {}) as Period[];
 const selectedPeriod = ref<Period>(periodOptions[0] ?? ("Daily" as Period));
@@ -69,6 +68,19 @@ const progressColor = computed<string>(() => {
 
 <style scoped>
 .v-card {
-  min-width: 180px;
+  width: 31.5%;
+  padding: 1.5rem;
+}
+
+.progress-wrapper {
+  width: 95%;
+  aspect-ratio: 1 / 1;
+  max-height: 14rem;
+  position: relative;
+}
+
+.progress-circle {
+  width: 100% !important;
+  height: 100% !important;
 }
 </style>

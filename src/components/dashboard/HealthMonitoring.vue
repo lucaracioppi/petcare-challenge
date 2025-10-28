@@ -1,8 +1,8 @@
 <template>
-  <v-card class="pa-4 border" elevation="0" rounded="lg">
+  <v-card class="pa-6 border" elevation="0" rounded="lg">
     <!-- Header -->
-    <div class="d-flex justify-space-between align-center mb-4">
-      <span class="text-subtitle-2 text-textPrimary text-uppercase opacity-70">
+    <div class="d-flex justify-space-between align-center mb-6">
+      <span class="text-body-1 text-textPrimary text-uppercase opacity-70">
         Health Monitoring
       </span>
 
@@ -22,7 +22,7 @@
     <v-sheet
       color="secondary"
       rounded="lg"
-      class="d-flex flex-wrap ga-4 mb-6 pa-2 border"
+      class="metrics-grid mb-6 pa-2 border"
     >
       <v-btn
         v-for="metric in metrics"
@@ -32,9 +32,10 @@
           activeMetric === metric.key ? 'primary' : 'textPrimary opacity-70'
         "
         rounded="lg"
+        height="48"
         @click="activeMetric = metric.key"
         :prepend-icon="metric.icon"
-        class="flex-grow-1 text-none"
+        class="text-none"
       >
         {{ metric.label }}
       </v-btn>
@@ -43,7 +44,7 @@
       >
     </v-sheet>
 
-    <v-sheet color="secondary" class="pa-4 rounded-lg">
+    <v-sheet color="secondary" class="rounded-lg">
       <div class="d-flex">
         <!-- Y axis -->
         <div class="d-none d-md-flex flex-column justify-space-between mr-2">
@@ -75,6 +76,7 @@
             line-width="2"
             stroke-linecap="butt"
             stroke-linejoin="miter"
+            class="mt-4"
             :smooth="false"
           />
           <div v-else class="text-center opacity-50 mt-2">
@@ -138,6 +140,37 @@ watch([activeMetric, period], () => {
 .position-relative {
   position: relative;
   height: 100%;
+}
+
+.metrics-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 1600px) {
+  .metrics-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (min-width: 1366px) and (max-width: 1599px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 960px) and (max-width: 1365px) {
+  .metrics-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (min-width: 768px) and (max-width: 959px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 767px) {
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .sparkline-grid {

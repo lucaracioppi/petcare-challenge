@@ -1,40 +1,50 @@
 <template>
-  <v-card class="pa-4 w-100 rounded-lg" elevation="1">
+  <v-card class="pa-6 w-100 rounded-lg" elevation="1">
     <!-- Header -->
-    <div class="d-flex justify-space-between align-center mb-4">
-      <span
-        class="text-subtitle-2 font-weight-medium text-uppercase opacity-70"
-      >
+    <div class="d-flex justify-space-between align-center mb-6">
+      <span class="text-body-1 font-weight-medium text-uppercase opacity-70">
         Chat
       </span>
     </div>
 
     <!-- Chats -->
-    <div class="chat-list">
+    <div>
       <v-row
         v-for="(chat, index) in chats"
         :key="index"
         class="align-center chat-row"
         @click="openChatOverlay(chat)"
       >
-        <v-col cols="1">
-          <span v-if="chat?.status" :class="['status-dot', chat.status]"></span>
-          <img
-            :src="chat?.avatar || '/avatars/placeholder-avatar.png'"
-            alt="avatar"
-            class="avatar-img"
-          />
+        <v-col
+          cols="2"
+          md="1"
+          class="d-flex justify-center pa-0 position-relative"
+        >
+          <div>
+            <span
+              v-if="chat?.status"
+              :class="['status-dot', chat.status]"
+            ></span>
+            <img
+              :src="chat?.avatar || '/avatars/placeholder-avatar.png'"
+              alt="avatar"
+              class="avatar-img"
+            />
+          </div>
         </v-col>
 
-        <v-col cols="10 text-textPrimary">
+        <v-col cols="10" class="text-textPrimary">
           <p>{{ chat?.name || "Unknown" }}</p>
           <v-card-subtitle class="pa-0 opacity-70">
-            {{ chat?.message?.slice(0, 50) || "" }}
-            {{ chat?.message && chat.message.length > 50 ? "..." : "" }}
+            {{ chat?.message || "" }}
           </v-card-subtitle>
         </v-col>
 
-        <v-col cols="1" class="pa-0">
+        <v-col
+          cols="0"
+          md="1"
+          class="pa-0 d-none d-md-flex flex-column align-end"
+        >
           <span class="text-textPrimary opacity-70" style="font-size: 14px">
             {{ chat?.time || "--:--" }}
           </span>
@@ -96,7 +106,7 @@ const openChatOverlay = (chat: Chat | null) => {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  border: 2px solid white;
+  border: 1px solid white;
 }
 
 .status-dot.online {
@@ -121,7 +131,7 @@ const openChatOverlay = (chat: Chat | null) => {
 .avatar-img {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: 20%;
   object-fit: cover;
 }
 

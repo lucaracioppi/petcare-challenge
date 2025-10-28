@@ -2,7 +2,7 @@
   <v-navigation-drawer
     app
     v-model="drawer"
-    width="260"
+    width="288"
     color="secondary"
     class="d-flex flex-column"
     :class="rail ? 'pa-1' : 'pa-4'"
@@ -12,8 +12,8 @@
   >
     <div class="flex-grow-1 d-flex flex-column">
       <!-- Logo + toggle -->
-      <div class="d-flex align-center justify-space-between">
-        <div v-if="!rail" class="d-flex align-center mt-4 ml-4">
+      <div class="d-flex align-center justify-space-between mb-10">
+        <div v-if="!rail" class="d-flex align-center mt-4 ml-6">
           <img src="/logo-petcare.png" alt="PetCare Logo" height="24" />
         </div>
         <v-btn
@@ -29,7 +29,7 @@
         v-if="!rail"
         nav
         density="comfortable"
-        class="mt-10 flex-grow-1 overflow-auto"
+        class="flex-grow-1 overflow-auto"
       >
         <template v-for="(section, key) in menu || []" :key="key">
           <v-list-subheader class="sidebar-title">
@@ -63,6 +63,7 @@
                     ? 'text-secondary'
                     : 'text-textPrimary opacity-70'
                 "
+                style="font-size: 14px"
               >
                 {{ item?.title || "Untitled" }}
               </v-list-item-title>
@@ -99,7 +100,7 @@
             </template>
           </v-list-item>
 
-          <v-divider class="my-4" />
+          <v-divider v-if="section.title !== 'Help'" class="my-6" />
         </template>
       </v-list>
     </div>
@@ -158,15 +159,18 @@ const handleLogout = () => {
 
 <style scoped>
 .sidebar-title {
-  font-size: 12px;
+  font-size: 14px !important;
   color: var(--v-theme-textPrimary);
   opacity: 0.7;
+  margin-left: 0.5rem;
   text-transform: uppercase;
 }
 
 .sidebar-item {
   border-radius: 8px;
   position: relative;
+  padding: 0.5rem 1rem;
+  margin-top: 0.5rem;
 }
 
 .user-avatars {
